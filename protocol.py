@@ -55,6 +55,7 @@ class Agent:
 def select_positions(LF, LV, F, V, KB):
     # Combine LF and LV for complete priority mapping, defaulting to a low priority for undefined items
     priorities = {**{k: 0 for k in F.union(V)}, **LF, **LV}
+    print(f'priorit: {priorities}')
 
     # Create a dictionary to track whether a position has been chosen
     chosen_positions = {key: False for key in priorities.keys()}
@@ -207,8 +208,8 @@ KB = {
     ("dev", "emF"), ("att", "not emF")
 }
 LF1 = {"QaF": 4, "mdtpF":3 , "ecF": 2, "emF": 1}
-LV1 = {"enV": 3, "snV": 3, "lbV": 1, "eqV": 1}
-F = {"QaF", "mdtpF", "ZFE", "lvp"}
+LV1 = {"enV": 3, "snV": 3, "lbV": 2, "eqV": 2}
+F = {"QaF", "mdtpF", "ecF", "emF"}
 V = {"enV", "snV", "lbV", "eqV"}
 
 # Creation d'une instance de la classe Agent
