@@ -24,7 +24,7 @@ git clone https://github.com/Manelben6/ZFE.git
 cd ZFE
 
 Utilisation
-Pour utiliser le Système de Dialogue Basé sur des Agents, vous devez créer une instance de la classe Agent et ensuite initier des dialogues basés sur des sujets spécifiques.
+Pour utiliser le Système, vous devez créer une instance de la classe Agent et ensuite initier des dialogues basés sur des sujets spécifiques et éxécuter le protocol ensuite.
 
 ## Exemple :
 
@@ -57,11 +57,11 @@ V = {"enV", "snV", "lbV", "eqV"}
 agent1 = Agent(LF1, LV1, F, V, KB, "A1", [])
 agent2 = Agent(LF2, LV2, F, V, KB, "A2", [])
 
-# Initialize the dialogue
+# Initialiser le dialogue
 phi = "ZFE"
 init_dialogue(agent1, phi)
 
-# Run the protocol
+# Executer le protocol
 protocol(agent1, agent2, phi, LF1, LF2, LV1, LV2,gamma=0.5, epsilon=1)
 
 
