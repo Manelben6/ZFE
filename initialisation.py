@@ -157,8 +157,7 @@ KB = {
     ("mdtpF", "not vid"), ("mdtpF", "att"),
     ("mdtpF", "not ecF"), ("min", "vep"),
     ("cout", "not ecF"), ("lmb", "not lbV"),
-    ("vid", "cout"), ("prog", "adp"),
-    ("innov", "QaF"), ("bes", "vid"),
+    ("vid", "cout"), ("prog", "adp"), ("bes", "vid"),
     ("dev", "emF"), ("att", "not emF")
 }
 LF1 = {"QaF": 4, "mdtpF": 3, "ecF": 2, "emF": 2}
