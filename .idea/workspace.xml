@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55165d5f-fbbe-48b0-80ac-a621bd0ab983" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/protocol.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +47,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="Python.total">
+  <component name="RunManager" selected="Python.initialisation">
     <configuration name="dialogue" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ZFE" />
       <option name="ENV_FILES" value="" />
@@ -160,9 +161,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.initialisation" />
         <item itemvalue="Python.total" />
         <item itemvalue="Python.protocol" />
-        <item itemvalue="Python.initialisation" />
         <item itemvalue="Python.dialogue" />
         <item itemvalue="Python.init" />
       </list>
