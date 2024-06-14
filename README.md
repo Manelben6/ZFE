@@ -14,14 +14,14 @@ Le Système de Dialogue Basé sur des Agents est conçu pour simuler des convers
 - **Initialisation du Dialogue** : Commencer des dialogues sur des sujets spécifiés, en traitant des arguments logiques et des contributions.
 - **Sélection de Positions** : Sélection de positions et génération d'arguments basés sur les faits et valeurs disponibles.
 - **Évaluation de l'Acceptabilité** : Évaluation de l'acceptabilité des arguments en fonction des priorités des agents.
--**Protocoles de Dialogue**: Implémentation de protocoles pour structurer les échanges entre agents.
+- **Protocoles de Dialogue**: Implémentation de protocoles pour structurer les échanges entre agents.
 ## Installation
 
 Clonez le dépôt sur votre machine locale :
 
 ```bash
-git clone https://github.com/votreusername/systeme-de-dialogue-agent.git
-cd systeme-de-dialogue-agent
+git clone https://github.com/Manelben6/ZFE.git
+cd ZFE
 
 Utilisation
 Pour utiliser le Système de Dialogue Basé sur des Agents, vous devez créer une instance de la classe Agent et ensuite initier des dialogues basés sur des sujets spécifiques.
@@ -31,19 +31,40 @@ Pour utiliser le Système de Dialogue Basé sur des Agents, vous devez créer un
 
 ### Définir la base de connaissances et les ordres
 KB = {
-    ("QaF", "snV"), ("QaF", "enV"),
-    ...
+      ("QaF", "snV"), ("QaF", "enV"),
+    ("ZFE", "enV"), ("ZFE", "lvp"), ("ZFE", "mdtpF"),
+    ("mdtpF", "QaF"), ("lvp", "QaF"),
+    ("ZFE", "prog"), ("ZFE", "lmb"), ("ZFE", "vep"),
+    ("ZFE", "dev"), ("ZFE", "innov"),
+    ("vep", "eqV"), ("vep", "not eqV"),
+    ("adp", "lbV"), ("lvp", "QaF"),
+    ("mdtpF", "not vid"), ("mdtpF", "att"),
+    ("mdtpF", "not ecF"), ("min", "vep"),
+    ("cout", "not ecF"), ("lmb", "not lbV"),
+    ("vid", "cout"), ("prog", "adp"),
+    ("bes", "vid"),
+    ("dev", "emF"), ("att", "not emF")
 }
-LF1 = {"QaF": 4, "mdtpF": 3, "ZFE": 5, ...}
-LV1 = {"enV": 3, "snV": 3, "lbV": 1, ...}
+LF1 = {"QaF": 4, "mdtpF":3 , "ecF": 2, "emF": 1}
+LV1 = {"enV": 2, "snV": 2, "lbV": 2, "eqV": 1}
+LF2 = {"ecF":2, "emF":2, "QaF":2, "mdtpF":1}
+LV2 = {"lbV":3, "eqV": 3, "enV":1, "snV":1}
+
 F = {"QaF", "mdtpF", "ZFE", "lvp"}
 V = {"enV", "snV", "lbV", "eqV"}
 
 ### Créer une instance d'Agent
-agent = Agent(LF1, LV1, F, V, KB)
+agent1 = Agent(LF1, LV1, F, V, KB, "A1", [])
+agent2 = Agent(LF2, LV2, F, V, KB, "A2", [])
 
-### Initier un dialogue sur un sujet
-init_dialogue(agent, "ZFE")
+# Initialize the dialogue
+phi = "ZFE"
+init_dialogue(agent1, phi)
+
+# Run the protocol
+protocol(agent1, agent2, phi, LF1, LF2, LV1, LV2,gamma=0.5, epsilon=1)
+
+
 
 
 ## Contribution
