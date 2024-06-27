@@ -132,14 +132,14 @@ def select_positions(agent, LF, LV, F, V, KB):
     return selected_positions
 
 
-def argue(agent, p, KB):
+def select_argue(agent, p, KB):
     """
     Génère récursivement des arguments menant à la position 'p'.
     """
     results = []
     for (x, y) in KB:
         if y == p:
-            sub_args = argue(agent, x, KB)
+            sub_args = select_argue(agent, x, KB)
 
             if not sub_args:
                 results.append(([x], x , p))
@@ -205,7 +205,7 @@ def init_dialogue(agent, phi):
     liste_messages = []
     R = []
     for p in agent.V.union(agent.F):
-      R.extend(argue(agent,p,agent.KB))
+      R.extend(select_argue(agent,p,agent.KB))
 
 
 
@@ -237,7 +237,7 @@ def init_dialogue(agent, phi):
       return liste_messages
 
 
-def acceptable(p, LFi, LVi, gamma=0.7, epsilon=0.2):
+def acceptable(p, LFi, LVi, gamma=0.9, epsilon=0.2):
     """
     Détermine si le rang de 'p' dans les ordres partiels 'LFi' ou 'LVi' est dans la fraction supérieure 'gamma',
     modifiée par 'epsilon' selon que 'p' soit un fait ou une valeur.
@@ -271,9 +271,8 @@ def acceptable(p, LFi, LVi, gamma=0.7, epsilon=0.2):
     return False  # If 'p' is neither in LFi nor LVi
 
 
-def protocol(current_agent, previous_agent, phi, LF1, LF2, LV1, LV2, gamma=0.5, epsilon=1):
-  F = {"QaF", "mdtpF", "ecF", "emF"}
-  V = {"enV", "snV", "lbV", "eqV"}
+def protocol(current_agent, previous_agent, phi,F,V, LF1, LF2, LV1, LV2, gamma=0.5, epsilon=1):
+
 
   list_agents = [agent1, agent2]
   def process_messages(current_agent, previous_agent, list_messages):
@@ -282,7 +281,7 @@ def protocol(current_agent, previous_agent, phi, LF1, LF2, LV1, LV2, gamma=0.5, 
 
     R = []
     for p in V.union(F):
-      R.extend(argue(current_agent,p,current_agent.KB))
+      R.extend(select_argue(current_agent,p,current_agent.KB))
 
     A = filter_arguments(current_agent, R, phi)
 
@@ -308,16 +307,16 @@ def protocol(current_agent, previous_agent, phi, LF1, LF2, LV1, LV2, gamma=0.5, 
         for i in k:
           if i in F and is_best(current_agent, i):
             for v in V :
-              if f"CONTRIBUTE({v,i})" in KB:
-                send_message(current_agent.name, previous_agent.name, f"CONTRIBUTE({v,i})")
-                previous_agent.messages[-1].append(f"CONTRIBUTE({v,i})")
+              if f"CONTRIBUTE({i,v})" in KB:
+                send_message(current_agent.name, previous_agent.name, f"CONTRIBUTE({i,v})")
+                previous_agent.messages[-1].append(f"CONTRIBUTE({i,v})")
 
         for i in k:
           if current_agent.name == "A1":
-            R = argue(current_agent,f"{i}", current_agent.KB)
+            R = select_argue(current_agent,f"{i}", current_agent.KB)
           else:
-            R = argue(current_agent,f"not {i}", current_agent.KB)
-          A = filter_arguments(current_agent, R, phi)
+            R = select_argue(current_agent,f"not {i}", current_agent.KB)
+            A = filter_arguments(current_agent, R, phi)
           for a in A :
             if a[2] == f"not {i}":
                 send_message(current_agent.name, previous_agent.name, f"ARGUE({a})")
@@ -339,16 +338,19 @@ def protocol(current_agent, previous_agent, phi, LF1, LF2, LV1, LV2, gamma=0.5, 
               send_message(current_agent.name, previous_agent.name, f"CONCEDE({i})")
               previous_agent.messages[-1].append(f"CONCEDE({i})")
       for k in position_message:
-         R.extend(argue(current_agent, k, current_agent.KB))
-      A = filter_arguments(current_agent, R, phi)
-      for i in message:
-        if "ARGUE" in i:
-          for k in position_message:
-            for a in A :
 
-                if a[2] == k:
-                      send_message(current_agent.name, previous_agent.name, f"ARGUE({a})")
-                      previous_agent.messages[-1].append(f"ARGUE({a[0]})")
+         R.extend(select_argue(current_agent, k, current_agent.KB))
+         A = filter_arguments(current_agent, R, phi)
+
+         for i in message:
+            if "ARGUE" in i:
+                for a in A :
+                    if current_agent.name == "A1" :
+                        if a[2] == k:
+                              send_message(current_agent.name, previous_agent.name, f"ARGUE({a})")
+                              A.remove(a)
+                              previous_agent.messages[-1].append(f"ARGUE({a[0]})")
+
     current_agent.messages.clear()
     current_agent, previous_agent = switch_agents(current_agent, previous_agent)
     print(current_agent.name, previous_agent.name)
@@ -373,17 +375,17 @@ KB = {
     ("vep", "eqV"), ("vep", "not eqV"),
     ("adp", "lbV"), ("lvp", "QaF"),
     ("mdtpF", "not vid"), ("mdtpF", "att"),
-    ("mdtpF", "not ecF"), ("min", "vep"),
+    ("mdtpF", "ecF"), ("min", "vep"),
     ("cout", "not ecF"), ("lmb", "not lbV"),
     ("vid", "cout"), ("prog", "adp"),
-    ("bes", "vid"),
-    ("dev", "emF"), ("att", "not emF")
+    ("bes", "vid"),("ZFE", "bes"),
+    ("dev", "not fldF"), ("att", "fldF")
 }
-LF1 = {"QaF": 4, "mdtpF":3 , "ecF": 2, "emF": 1}
+LF1 = {"QaF": 4, "mdtpF":2.5 , "ecF": 2, "fldF": 1}
 LV1 = {"enV": 2, "snV": 2, "lbV": 2, "eqV": 1}
-LF2 = {"ecF":2, "emF":2, "QaF":2, "mdtpF":1}
+LF2 = {"ecF":2, "fldF":2, "QaF":2, "mdtpF":1}
 LV2 = {"lbV":3, "eqV": 3, "enV":1, "snV":1}
-F = {"QaF", "mdtpF", "emF", "ecF"}
+F = {"QaF", "mdtpF", "fldF", "ecF"}
 V = {"enV", "snV", "lbV", "eqV"}
 
 agent1 = Agent(LF=LF1, LV=LV1, F=F, V=V, KB=KB, name = "A1", messages=[])
@@ -391,5 +393,4 @@ agent2 = Agent(LF=LF2, LV=LV2, F=F, V=V, KB=KB, name = "A2", messages=[])
 
 agent2.messages.append(init_dialogue(agent1, 'ZFE'))
 print("A2")
-protocol(current_agent=agent1, previous_agent=agent2, phi="ZFE", LF1=LF1, LF2=LF2, LV1=LV1, LV2=LV2, gamma=0.5, epsilon=1)
-print(argue(agent2,"not ecF",KB))
+protocol(current_agent=agent1, previous_agent=agent2, phi="ZFE",F=F,V=V, LF1=LF1, LF2=LF2, LV1=LV1, LV2=LV2, gamma=0.5, epsilon=1)
