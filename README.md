@@ -65,10 +65,5 @@ init_dialogue(agent1, phi)
 protocol(agent1, agent2, phi, LF1, LF2, LV1, LV2,gamma=0.5, epsilon=1)
 
 
-
-
-## Contribution
-Les contributions sont les bienvenues ! N'hésitez pas à forker le dépôt, apporter des modifications, et soumettre des pull requests. Vous pouvez également ouvrir des issues si vous trouvez des bugs ou avez des suggestions de fonctionnalités.
-
-## Auteur
-Manel Bensalem - Manelben6
+## Auteur : 
+- Manel Bensalem
